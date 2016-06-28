@@ -188,17 +188,19 @@ var _escData = map[string]*_escFile{
 
 	"/static/editor.html": {
 		local:   "static/editor.html",
-		size:    779,
-		modtime: 1467150485,
+		size:    1101,
+		modtime: 1467152894,
 		compressed: `
-H4sIAAAJbogA/3RSwY6bMBC9V+o/zPpiIgXYXqoVgUhtGql7ag9bqdXuHhw8AUfGpmZgg6L8e02gUSJl
-5zLD8N7zm7HTu28/Vk9/fq6hpEovP35IzxmF9Bl8pBWS8ACqQ/zbqi5jv8NfX8KVrWpBaqORQW4NoaGM
-Pa4zlIXvxO+SVyM2fOrrSybhnuLh9EVeCtcgZS1twwcGg5t4spNurOx99pVUHSiZsUFAKIOOQUO9xoy9
-KUll8nB/X+8XJaqipOTz6WNjnUSXfKr30FitJBQOe7ZMY681ija5UzVB4/KMVdaI3IYoFVkXV8rEXRNr
-K7xEtGsG2ohennnTyG4Y1GHknW1VERzAr6lsEjgA7xqeAL+lzOF4nC2uBIJnj48n1Jiiyo/KX+ewbU1O
-yppgBoeRNEQnHIxAyGA8JZqIuUNBGEibt5Xfd1QgrTUO5df+UQb8vEY+m19KjrK6xQSer7tD8P8+YD84
-4fMbkBfy2n7fGGlbBOw7am3hzTot79hscZNy5NfN12hnlQn4i/Hurn9pYYpWFN4e34lOjBdxQT8v9VRc
-3lk8vaX09OqW/wIAAP//hoChjQsDAAA=
+H4sIAAAJbogA/3RTUU/bPBR9/6TvP1z84lRqE/YyobaptEE1kJg2TZ3EBDy48W1i5NiZ7YRWqP99102B
+ljG/OHbOOT4+13d6cvHtfPHr+xyqUOvZ//9NX2YUkmagMa0xCAKEZoS/W9Xl7Gb089Po3NaNCGqpkUFh
+TUATcnY1z1GWtJP9k3zeY0eLTXPIDLgOWTx9UlTCeQx5G1ajMwbRTba3M11auaGZvqTqQMmcRQGhDDoG
+Pmw05uxRyVCNz05Pm/WkQlVWYfxxt1haJ9GNPzRr8FYrCaXDDZtNM9LqRX3hVBPAuyJntTWisCOUKliX
+1cpknc+0FSSRPvhI69GzF97+yi5e1GFKzlaqTJ6AYqr8GJ6Ad56Pgb+nzGG7HUyOBJJbwmd7VD+lNV2V
+3w9h1ZoiKGuSATz1pDg64aAHQg79KemeWDgUARNpi7amvNMSw1xj/Py8uZIJf4mRD4aHkr2sbnEMt8e7
+cfBnH7COTvjwHchdIG3KG1Nty4RdotYWHq3T8oQNJu9Stvx48z59sMok/M6Qu+NfWpiyFSXZ4w+iE30h
+Dui7UF+X2a6CoAzY1oFMg4eV0ngc4bqK+Rl8hJuv15f0dH9QQdCH5LlAcRAoFVLOO4rwWnl6xOgSFtXZ
+YXneRLkvyrNrnwbqgt50+ur/Alei1cHvDlgHJ67VMgmV8qlD31CauKBuGQI3wtiRR9epAtN4G35ocfvW
+r23QJOzLfEEW2V9c9hbu0cjkNb+d3OGrz/bdON317exPAAAA///MIYa0TQQAAA==
 `,
 	},
 
@@ -24392,6 +24394,19 @@ nVhLSV6jkJSFKOrJhPfJ3Vpy103AcN1kMkwhHXYMjIbpX64/fmCu1RhZL+KyZSUlNz7cH5IcgZNxQxFD
 7EBMbuyNJsn+AYBxpZu1KtTrKB5UMQnw34MXYRiwD0YTupdxGTRqvC9B9B6cC7LR/0Lv8G6k0PZ/h2PV
 K78duq1vgG0/SWtb4UhphiLfcZSXtMf6DWZr2aMaHqMyQZdVvHdRfHrat2D0JMlfZdnvou5mgRXOcdOf
 P11wxjL8fy/14b2Yu6wLj/gwfP1fAAAA///vapb9AgwAAA==
+`,
+	},
+
+	"/static/nano-service.d.ts": {
+		local:   "static/nano-service.d.ts",
+		size:    539,
+		modtime: 1467151833,
+		compressed: `
+H4sIAAAJbogA/4SRPU/DMBCG90j5D6eoQxNFzZ6KkYUBBtiqDhf30ri4tvFHwUL8d+xEqQBByHTOPcn7
+vHJTVXkGFVh+1oLABskGo6TyFgbnNBzJwSt3A6ziNJK3b5jQFi5owJD1wsHNuF57I8ptgpo8OxATaAh6
+L5njSl6JFqwzXB7LeYhf5Nl/HlrZWSSNSyZpn4JqKFBrwRmm/OZklSxquHt8uN9MwbwPa9WdyvJP5flX
+s2oNnTqEp6Dp+5vlTi+eTACNBs/kyFhIIXhBLrCLXdGCGwhWExaFiP3Sr1cqlRuhTTxsl5FdEU/F/udt
+JGwCWniPu/jsnunqv//i//EZAAD//8Mc1ZIbAgAA
 `,
 	},
 

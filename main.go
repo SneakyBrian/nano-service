@@ -17,7 +17,7 @@ import (
 func main() {
 
 	portNumPtr := flag.Uint("port", 8181, "port number for webserver")
-	useLocalPtr := flag.Bool("useLocal", false, "use local filesystem for debugging purposes")
+	useLocalPtr := flag.Bool("useLocal", false, "use local filesystem for serving static resources for debugging purposes")
 	maxScriptTimePtr := flag.Uint("maxScriptTime", 10, "the maximum number of seconds that a script is permitted to run")
 	storageDirPtr := flag.String("storageDir", "storage", "the path to store files under")
 
@@ -29,6 +29,7 @@ func main() {
 	fmt.Printf("Starting nano-service on port %d\n", *portNumPtr)
 	fmt.Printf("Max Script Run Time Seconds: %d\n", run.MaxScriptTime)
 	fmt.Printf("Storage Root Directory: %s\n", storage.RootDir)
+	fmt.Printf("Use Local FileSystem for Static Resources: %t\n", *useLocalPtr)
 
 	http.HandleFunc("/deploy/", deploy.HandleDeploy)
 	http.HandleFunc("/run/", run.HandleRun)
