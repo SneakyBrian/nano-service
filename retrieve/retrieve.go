@@ -2,6 +2,7 @@ package retrieve
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/SneakyBrian/nano-service/storage"
 )
@@ -10,11 +11,11 @@ import (
 func HandleRetrieve(w http.ResponseWriter, r *http.Request) {
 	var err error
 
-	query := r.URL.Query()
+	//get the name and the hash from the path
+	urlPart := strings.Split(r.URL.Path, "/")
 
-	//get the name and the hash from the querystring
-	name := query.Get("name")
-	hash := query.Get("hash")
+	name := urlPart[2]
+	hash := urlPart[3]
 
 	if name != "" && hash != "" {
 

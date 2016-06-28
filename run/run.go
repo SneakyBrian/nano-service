@@ -8,35 +8,37 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/SneakyBrian/nano-service/storage"
 	"github.com/robertkrimen/otto"
 )
 
+//MaxScriptTime is the maximum number of seconds that a script is permitted to run
+var MaxScriptTime uint = 10
+
 // HandleRun handles running the script
 func HandleRun(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 
-	query := r.URL.Query()
+	//get the name and the hash from the path
+	urlPart := strings.Split(r.URL.Path, "/")
 
-	//get the name and the hash from the querystring
-	name := query.Get("name")
-	hash := query.Get("hash")
+	name := urlPart[2]
+	hash := urlPart[3]
 
 	if name != "" && hash != "" {
-		//remove the name and the hash from the query object to avoid confusion
-		query.Del("name")
-		query.Del("hash")
 
 		if script, err := storage.Get(name, hash); err == nil {
+
+			query := r.URL.Query()
 
 			//get the configured VM
 			vm := getVM(query)
 
 			//run the script
-			//if value, err := vm.Run(script); err == nil {
 			if value, err := runUnsafe(vm, script); err == nil {
 
 				if responseBody, err := value.ToString(); err == nil {
@@ -113,8 +115,6 @@ func getVM(query url.Values) (vm *otto.Otto) {
 
 var errHalt = errors.New("Script Time Overrun")
 
-const maxScriptTime = 10
-
 func runUnsafe(vm *otto.Otto, unsafe interface{}) (value otto.Value, err error) {
 
 	start := time.Now()
@@ -133,7 +133,7 @@ func runUnsafe(vm *otto.Otto, unsafe interface{}) (value otto.Value, err error) 
 	vm.Interrupt = make(chan func(), 1) // The buffer prevents blocking
 
 	go func() {
-		time.Sleep(maxScriptTime * time.Second) // Stop after maxScriptTime seconds
+		time.Sleep(time.Duration(MaxScriptTime) * time.Second) // Stop after MaxScriptTime seconds
 		vm.Interrupt <- func() {
 			panic(errHalt)
 		}

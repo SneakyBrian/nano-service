@@ -12,7 +12,8 @@ import (
 	"github.com/robertkrimen/otto"
 )
 
-const storageDir = "storage"
+//RootDir is the path to store files under
+var RootDir = "storage"
 
 var cache = make(map[string]*otto.Script)
 
@@ -66,5 +67,5 @@ func Get(name string, hash string) (script *otto.Script, err error) {
 }
 
 func getJSPath(name string, hash string) (path string) {
-	return fmt.Sprintf("%s/%s/%s.js", storageDir, name, hash)
+	return fmt.Sprintf("%s/%s/%s.js", RootDir, name, hash)
 }

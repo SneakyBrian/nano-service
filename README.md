@@ -18,11 +18,16 @@ result;
 ```
 
 In order to deploy this code, we need to HTTP POST it to the 
-nano-service `/deploy/` endpoint. Here's an example using 
+nano-service `/deploy/` endpoint.
+
+The format of the URL is `/deploy/{name}`
+
+In this example we specify `helloworld` as the name 
+(the last part of the path). Here's an example using 
 [Fiddler](http://www.telerik.com/fiddler)
 
 ```
-POST http://localhost:8181/deploy/?name=helloworld HTTP/1.1
+POST http://localhost:8181/deploy/helloworld HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:8181
 Content-Length: 41
@@ -36,7 +41,7 @@ The response contains the hash of the function created:
 
 ```
 HTTP/1.1 200 OK
-Date: Sun, 26 Jun 2016 13:33:25 GMT
+Date: Tue, 28 Jun 2016 20:57:06 GMT
 Content-Length: 43
 Content-Type: text/plain; charset=utf-8
 
@@ -45,10 +50,12 @@ h7vkaYrOMALxdos6hp2TNSX0xPZIMON3ojkE9Q1sUPw
 
 ## Running code
 
-We can run the code using the `/run/` endpoint:
+We can run the code using the `/run/` endpoint.
+
+The format of the URL is `/run/{name}/{hash}[?{key1}={value1}&{key2}={value2}]`
 
 ```
-GET http://localhost:8181/run/?name=helloworld&hash=h7vkaYrOMALxdos6hp2TNSX0xPZIMON3ojkE9Q1sUPw HTTP/1.1
+GET http://localhost:8181/run/helloworld/h7vkaYrOMALxdos6hp2TNSX0xPZIMON3ojkE9Q1sUPw HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:8181
 Content-Length: 0
@@ -58,7 +65,7 @@ Which returns the result:
 
 ```
 HTTP/1.1 200 OK
-Date: Sun, 26 Jun 2016 13:36:36 GMT
+Date: Tue, 28 Jun 2016 20:58:00 GMT
 Content-Length: 12
 Content-Type: text/plain; charset=utf-8
 
@@ -68,7 +75,7 @@ Hello World!
 ## Parameters
 
 Request parameters are passed in the query string. They are exposed to
-the script as members of the $query object.
+the script as members of the `$query` object.
 
 In this example we take two parameters passed to the script, `val1`
 and `val2`, add them together and return the result.
@@ -82,7 +89,7 @@ Number($query.val1) + Number($query.val2);
 So we deploy this code:
 
 ```
-POST http://localhost:8181/deploy/?name=add HTTP/1.1
+POST http://localhost:8181/deploy/add HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:8181
 Content-Length: 42
@@ -94,7 +101,7 @@ And get back the hash of the validated code:
 
 ```
 HTTP/1.1 200 OK
-Date: Sun, 26 Jun 2016 13:43:24 GMT
+Date: Tue, 28 Jun 2016 20:59:23 GMT
 Content-Length: 43
 Content-Type: text/plain; charset=utf-8
 
@@ -105,7 +112,7 @@ We then execute it, passing `12` as the value of `val1`, and `34` as
 the value of `val2`:
 
 ```
-GET http://localhost:8181/run/?name=add&hash=uH6BOHvnm0VUCBpa7TltWSUwYgoR1jLRctrZVgiBfpo&val1=12&val2=34 HTTP/1.1
+GET http://localhost:8181/run/add/uH6BOHvnm0VUCBpa7TltWSUwYgoR1jLRctrZVgiBfpo?val1=12&val2=34 HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:8181
 Content-Length: 0
@@ -115,7 +122,7 @@ The response is the value `46`:
 
 ```
 HTTP/1.1 200 OK
-Date: Sun, 26 Jun 2016 13:43:52 GMT
+Date: Tue, 28 Jun 2016 21:00:21 GMT
 Content-Length: 2
 Content-Type: text/plain; charset=utf-8
 
@@ -141,7 +148,7 @@ returns it.
 `/deploy/` the code:
 
 ```
-POST http://localhost:8181/deploy/?name=get HTTP/1.1
+POST http://localhost:8181/deploy/get HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:8181
 Content-Length: 16
@@ -151,7 +158,7 @@ $get($query.url)
 
 ```
 HTTP/1.1 200 OK
-Date: Sun, 26 Jun 2016 13:46:49 GMT
+Date: Tue, 28 Jun 2016 21:01:06 GMT
 Content-Length: 43
 Content-Type: text/plain; charset=utf-8
 
@@ -161,7 +168,7 @@ rV00-kyEgoZfZa8D9MOxeXqqFiItt0_l61WD_n9Rbm4
 `/run/` the code, passing an RSS feed url as the parameter:
 
 ```
-GET http://localhost:8181/run/?name=get&hash=rV00-kyEgoZfZa8D9MOxeXqqFiItt0_l61WD_n9Rbm4&url=http%3A%2F%2Ffeeds.bbci.co.uk%2Fnews%2Frss.xml%3Fedition%3Duk HTTP/1.1
+GET http://localhost:8181/run/get/rV00-kyEgoZfZa8D9MOxeXqqFiItt0_l61WD_n9Rbm4?url=http%3A%2F%2Ffeeds.bbci.co.uk%2Fnews%2Frss.xml%3Fedition%3Duk HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:8181
 Content-Length: 0
@@ -169,9 +176,9 @@ Content-Length: 0
 
 ```
 HTTP/1.1 200 OK
-Date: Sun, 26 Jun 2016 13:49:15 GMT
+Date: Tue, 28 Jun 2016 21:03:06 GMT
 Content-Type: text/xml; charset=utf-8
-Content-Length: 32035
+Content-Length: 41148
 
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/shared/bsp/xsl/rss/nolsol.xsl"?>

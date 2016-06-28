@@ -1,8 +1,10 @@
 package deploy
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/SneakyBrian/nano-service/storage"
 	"github.com/robertkrimen/otto"
@@ -15,8 +17,9 @@ func HandleDeploy(w http.ResponseWriter, r *http.Request) {
 
 		var err error
 
-		query := r.URL.Query()
-		name := query.Get("name")
+		urlPart := strings.Split(r.URL.Path, "/")
+
+		name := urlPart[2]
 
 		if name != "" {
 
@@ -32,6 +35,7 @@ func HandleDeploy(w http.ResponseWriter, r *http.Request) {
 			if script, err := vm.Compile(name, bodyString); err == nil {
 
 				if hash, err := storage.Set(name, script); err == nil {
+					fmt.Printf("Deployed Script %s (%s)\n", name, hash)
 					w.Write([]byte(hash))
 					return
 				}
