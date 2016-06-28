@@ -1,5 +1,7 @@
 package main
 
+//go:generate esc -o static.go static
+
 import (
 	"flag"
 	"fmt"
@@ -15,6 +17,7 @@ import (
 func main() {
 
 	portNumPtr := flag.Uint("port", 8181, "port number for webserver")
+	useLocalPtr := flag.Bool("useLocal", false, "use local filesystem for debugging purposes")
 	maxScriptTimePtr := flag.Uint("maxScriptTime", 10, "the maximum number of seconds that a script is permitted to run")
 	storageDirPtr := flag.String("storageDir", "storage", "the path to store files under")
 
@@ -30,6 +33,8 @@ func main() {
 	http.HandleFunc("/deploy/", deploy.HandleDeploy)
 	http.HandleFunc("/run/", run.HandleRun)
 	http.HandleFunc("/retrieve/", retrieve.HandleRetrieve)
+
+	http.Handle("/static/", http.FileServer(FS(*useLocalPtr)))
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *portNumPtr), nil))
 
