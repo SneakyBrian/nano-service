@@ -188,19 +188,29 @@ var _escData = map[string]*_escFile{
 
 	"/static/editor.html": {
 		local:   "static/editor.html",
-		size:    1101,
-		modtime: 1467152894,
+		size:    395,
+		modtime: 1467153746,
 		compressed: `
-H4sIAAAJbogA/3RTUU/bPBR9/6TvP1z84lRqE/YyobaptEE1kJg2TZ3EBDy48W1i5NiZ7YRWqP99102B
-ljG/OHbOOT4+13d6cvHtfPHr+xyqUOvZ//9NX2YUkmagMa0xCAKEZoS/W9Xl7Gb089Po3NaNCGqpkUFh
-TUATcnY1z1GWtJP9k3zeY0eLTXPIDLgOWTx9UlTCeQx5G1ajMwbRTba3M11auaGZvqTqQMmcRQGhDDoG
-Pmw05uxRyVCNz05Pm/WkQlVWYfxxt1haJ9GNPzRr8FYrCaXDDZtNM9LqRX3hVBPAuyJntTWisCOUKliX
-1cpknc+0FSSRPvhI69GzF97+yi5e1GFKzlaqTJ6AYqr8GJ6Ad56Pgb+nzGG7HUyOBJJbwmd7VD+lNV2V
-3w9h1ZoiKGuSATz1pDg64aAHQg79KemeWDgUARNpi7amvNMSw1xj/Py8uZIJf4mRD4aHkr2sbnEMt8e7
-cfBnH7COTvjwHchdIG3KG1Nty4RdotYWHq3T8oQNJu9Stvx48z59sMok/M6Qu+NfWpiyFSXZ4w+iE30h
-Dui7UF+X2a6CoAzY1oFMg4eV0ngc4bqK+Rl8hJuv15f0dH9QQdCH5LlAcRAoFVLOO4rwWnl6xOgSFtXZ
-YXneRLkvyrNrnwbqgt50+ur/Alei1cHvDlgHJ67VMgmV8qlD31CauKBuGQI3wtiRR9epAtN4G35ocfvW
-r23QJOzLfEEW2V9c9hbu0cjkNb+d3OGrz/bdON317exPAAAA///MIYa0TQQAAA==
+H4sIAAAJbogA/3SPwU6EMBCG7ya+Q+29dr2YDduSGNyDJz2siR4LHWEM0NrOIry9BTZqjMuFv83/fZ1R
+V/ePxeH1ac8a6tr88kKd/nMCY1Ni6VMdkEkV8gI+jjho/iKe70ThOm8IyxY4q1xP0JPmD3sNtk438ixc
+rF1xmPxvkmAkOb+/qxoTIpA+0pvY8nkseZomxdLZaUmL3OLA0Go+Wwz2EDiLNLWg+SdaarLtZuPHXQNY
+N5TdLofSBQshu/Eji65Fy+oAE8+VTK4fcawCemIxVJp3rjeVE2CRXJAd9nKIsnUmaa7f44yu7fwfdoX+
+1pT8XkMtO+dfAQAA//9qhInliwEAAA==
+`,
+	},
+
+	"/static/editor.js": {
+		local:   "static/editor.js",
+		size:    763,
+		modtime: 1467153761,
+		compressed: `
+H4sIAAAJbogA/3SRwW7bMAyG7wP2DpwvkoFUvifYZViwDsguQw8D2h40i3FUKJQn0a6LwO8+KU6XuEt5
+sU2TPz/+lNuOaraeQJZw+PgBUgT809mAqva0tY08QKt5F5dwANFHsQSx96Rrf4PGsg/V3lKV8jDCWK5m
+CvI+NVSnsumh9tqSeFzAlbk5eh1gqoTPMM1Rp846oGaUxtfdHolVg7x2mF+/vHw3UiRcTuIYRLm4lJxk
+XYdLuJ9nc4h/IEMmEYsrJQ+ctKN3qJxvZHGLznl49sGZT0W5utoyinnyUT15S1I8UKKb/3Kamk43CU88
+6V7HOtiWL9qPrp4/q8p5bcAS+C6AURxhax3OLRx22T/CZ/j1Y3PL3P5MF8HI8vVCOVKR0sas+2ThxkbG
+5J0ssnrx7n1ynM7yyh0Vv7Q4YavzBl9xqzvH8Thi4KA39rfknY0qYGyTn3iHAy9AkCZ/EzH0tkaV9xGX
+kONbYt8iyeLb+i5BFv/1Fm/LI5KRZwePcmNaqlz9DQAA///C02j2+wIAAA==
 `,
 	},
 
