@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -33,10 +32,8 @@ func HandleRun(w http.ResponseWriter, r *http.Request) {
 
 		if script, err := storage.Get(name, hash); err == nil {
 
-			query := r.URL.Query()
-
 			//get the configured VM
-			vm := getVM(query)
+			vm := getVM(r)
 
 			//run the script
 			if value, err := runUnsafe(vm, script); err == nil {
@@ -58,7 +55,7 @@ func HandleRun(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
 
-func getVM(query url.Values) (vm *otto.Otto) {
+func getVM(r *http.Request) (vm *otto.Otto) {
 
 	//create the runtime
 	vm = otto.New()
@@ -107,8 +104,25 @@ func getVM(query url.Values) (vm *otto.Otto) {
 
 	})
 
-	//add in the query values as the global $query object
-	vm.Set("$query", query)
+	//add in the request values as the global objects
+
+	r.ParseForm()
+
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+
+	cookies := r.Cookies()
+	cookieMap := make(map[string]string)
+
+	for _, cookie := range cookies {
+		cookieMap[cookie.Name] = cookie.Value
+	}
+
+	vm.Set("$uri", r.RequestURI)
+	vm.Set("$headers", r.Header)
+	vm.Set("$cookies", cookieMap)
+	vm.Set("$params", r.Form)
+	vm.Set("$body", string(body))
 
 	return vm
 }

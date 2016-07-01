@@ -17,8 +17,22 @@ var RootDir = "storage"
 
 var cache = make(map[string]*otto.Script)
 
+type storageVersion struct {
+	Hash         string
+	BasisVersion *storageVersion
+}
+
+type storageFunction struct {
+	Name    string
+	Version []storageVersion
+}
+
+type storageManifest struct {
+	Functions []storageFunction
+}
+
 //Set stores the script in storage
-func Set(name string, script *otto.Script) (hash string, err error) {
+func Set(name string, script *otto.Script, basisHash string) (hash string, err error) {
 
 	src := script.String()
 
@@ -41,6 +55,11 @@ func Set(name string, script *otto.Script) (hash string, err error) {
 	pathOnly := filepath.Dir(pathName)
 	os.MkdirAll(pathOnly, 0644)
 	err = ioutil.WriteFile(pathName, data, 0644)
+
+	//write out basis hash if we have it
+	if err == nil && basisHash != "" {
+		err = ioutil.WriteFile(fmt.Sprintf("%s.basis", pathName), []byte(basisHash), 0644)
+	}
 
 	return hash, err
 }

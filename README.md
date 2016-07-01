@@ -3,7 +3,7 @@
 nano-service is an example of building a platform that allows rapid
 deployment of web application code.
 
-The server-side script that runs is written in JavaScript, and 
+The server-side script that runs is JavaScript, and 
 executes in the context of the request, returning the evaluated result.
 
 ## Deploying code
@@ -11,13 +11,13 @@ executes in the context of the request, returning the evaluated result.
 As an example, let's say we wanted to create a friendly service that
 responds with a cheerful greeting, we can write the script like this:
 
-```
+```javascript
 var result = "Hello World!";
 
 result;
 ```
 
-In order to deploy this code, we need to HTTP POST it to the 
+To deploy this code, we need to HTTP POST it to the 
 nano-service `/deploy/` endpoint.
 
 The format of the URL is `/deploy/{name}`
@@ -74,16 +74,16 @@ Hello World!
 
 ## Parameters
 
-Request parameters are passed in the query string. They are exposed to
-the script as members of the `$query` object.
+Pass request parameters in the query string. These are then exposed to
+the script as members of the global `$params` object.
 
 In this example we take two parameters passed to the script, `val1`
 and `val2`, add them together and return the result.
 
 The JavaScript looks like this:
 
-```
-Number($query.val1) + Number($query.val2);
+```javascript
+Number($params.val1) + Number($params.val2);
 ```
 
 So we deploy this code:
@@ -92,27 +92,27 @@ So we deploy this code:
 POST http://localhost:8181/deploy/add HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:8181
-Content-Length: 42
+Content-Length: 44
 
-Number($query.val1) + Number($query.val2);
+Number($params.val1) + Number($params.val2);
 ```
 
 And get back the hash of the validated code:
 
 ```
 HTTP/1.1 200 OK
-Date: Tue, 28 Jun 2016 20:59:23 GMT
+Date: Fri, 01 Jul 2016 22:00:13 GMT
 Content-Length: 43
 Content-Type: text/plain; charset=utf-8
 
-uH6BOHvnm0VUCBpa7TltWSUwYgoR1jLRctrZVgiBfpo
+NO2gb4GKaDoUtBccf5Ail3gEB0O9sZLdwWWaidlxBGU
 ```
 
 We then execute it, passing `12` as the value of `val1`, and `34` as
 the value of `val2`:
 
 ```
-GET http://localhost:8181/run/add/uH6BOHvnm0VUCBpa7TltWSUwYgoR1jLRctrZVgiBfpo?val1=12&val2=34 HTTP/1.1
+GET http://localhost:8181/run/add/NO2gb4GKaDoUtBccf5Ail3gEB0O9sZLdwWWaidlxBGU?val1=12&val2=34 HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:8181
 Content-Length: 0
@@ -122,7 +122,7 @@ The response is the value `46`:
 
 ```
 HTTP/1.1 200 OK
-Date: Tue, 28 Jun 2016 21:00:21 GMT
+Date: Fri, 01 Jul 2016 22:01:19 GMT
 Content-Length: 2
 Content-Type: text/plain; charset=utf-8
 
@@ -134,11 +134,11 @@ Content-Type: text/plain; charset=utf-8
 The nano-service scripting runtime has some simple synchronous http 
 functions for `GET` and `POST` operations:
 
-```
+```javascript
 var result = $get(url);
 ```
 
-```
+```javascript
 var result = $post(url, "application/json", JSON.stringify(obj))
 ```
 
@@ -153,7 +153,7 @@ User-Agent: Fiddler
 Host: localhost:8181
 Content-Length: 16
 
-$get($query.url)
+$get($params.url)
 ```
 
 ```
@@ -197,7 +197,147 @@ Content-Length: 41148
 
 ```
 
+## Advanced
+
+Here is a script which demonstrates inspecting the global request objects:
+
+* `$uri` - The full URI of the request as a string.
+* `$headers` - All HTTP Headers passed in the request.
+* `$cookies` - All HTTP Cookies passed in the request.
+* `$params` - All Query String parameters passed int the URI. 
+Also if the request was a POST or PUT, and it's `Content-Type` was 
+`application/x-www-form-urlencoded`, then the Form variables will be 
+in here too.
+* `$body` - This is the POST or PUT body of the request, as a string. 
+
+It also demonstrates use of the `JSON` and `console` global objects. 
+
+The script looks like this:
+
+```javascript
+var req  = {
+  uri: $uri,
+  headers: $headers,
+  cookies: $cookies,
+  params: $params,
+  body: $body  
+};
+
+var reqString = JSON.stringify(req);
+
+console.log(reqString);
+
+reqString;
+```
+
+Lets deploy the script:
+
+```
+POST http://localhost:8181/deploy/inspect_request HTTP/1.1
+User-Agent: Fiddler
+Host: localhost:8181
+Content-Length: 192
+
+var req  = {
+  uri: $uri,
+  headers: $headers,
+  cookies: $cookies,
+  params: $params,
+  body: $body  
+};
+
+var reqString = JSON.stringify(req);
+
+console.log(reqString);
+
+reqString;
+```
+
+All is well, so we get back the hash version:
+
+```
+HTTP/1.1 200 OK
+Date: Fri, 01 Jul 2016 21:49:31 GMT
+Content-Length: 43
+Content-Type: text/plain; charset=utf-8
+
+HqTisjBvsBLPtpZ0E9t38Lr_LUSkBmMQOG5SDM26leU
+```
+
+Now we have succesfully deployed, we can execute the script. To make it
+more interesting, lets expand the amount of information we pass in the 
+request, and also use a HTTP POST rather than a GET:
+
+```
+POST http://localhost:8181/run/inspect_request/HqTisjBvsBLPtpZ0E9t38Lr_LUSkBmMQOG5SDM26leU?foo=bar&fan=ban HTTP/1.1
+Host: localhost:8181
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (SAMSUNG_FRIDGEFREEZER_10.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+DNT: 1
+Referer: https://www.google.co.uk/
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8
+Cookie: __utmc=123456789; prov=412480918059358; __qca=2340975023957; _ga=238093583532523
+If-Modified-Since: Fri, 01 Jul 2016 21:33:40 GMT
+Content-Length: 38
+
+This is some nice POST body data!!!111
+```
+
+And so, here is the JSON formatted response we get back:
+
+```
+HTTP/1.1 200 OK
+Date: Fri, 01 Jul 2016 22:18:15 GMT
+Content-Length: 915
+Content-Type: text/plain; charset=utf-8
+
+{"body":"This is some nice POST body data!!!111","cookies":{"__qca":"2340975023957","__utmc":"123456789","_ga":"238093583532523","prov":"412480918059358"},"headers":{"Accept":["text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"],"Accept-Encoding":["gzip, deflate, sdch"],"Accept-Language":["en-US,en;q=0.8"],"Cache-Control":["max-age=0"],"Connection":["keep-alive"],"Content-Length":["38"],"Cookie":["__utmc=123456789; prov=412480918059358; __qca=2340975023957; _ga=238093583532523"],"Dnt":["1"],"If-Modified-Since":["Fri, 01 Jul 2016 21:33:40 GMT"],"Referer":["https://www.google.co.uk/"],"Upgrade-Insecure-Requests":["1"],"User-Agent":["Mozilla/5.0 (SAMSUNG_FRIDGEFREEZER_10.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"]},"params":{"fan":["ban"],"foo":["bar"]},"uri":"/run/inspect_request/HqTisjBvsBLPtpZ0E9t38Lr_LUSkBmMQOG5SDM26leU?foo=bar\u0026fan=ban"}
+```
+
+In a more readable format:
+
+```json
+{
+	"body" : "This is some nice POST body data!!!111",
+	"cookies" : {
+		"__qca" : "2340975023957",
+		"__utmc" : "123456789",
+		"_ga" : "238093583532523",
+		"prov" : "412480918059358"
+	},
+	"headers" : {
+		"Accept" : ["text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"],
+		"Accept-Encoding" : ["gzip, deflate, sdch"],
+		"Accept-Language" : ["en-US,en;q=0.8"],
+		"Cache-Control" : ["max-age=0"],
+		"Connection" : ["keep-alive"],
+		"Content-Length" : ["38"],
+		"Cookie" : ["__utmc=123456789; prov=412480918059358; __qca=2340975023957; _ga=238093583532523"],
+		"Dnt" : ["1"],
+		"If-Modified-Since" : ["Fri, 01 Jul 2016 21:33:40 GMT"],
+		"Referer" : ["https://www.google.co.uk/"],
+		"Upgrade-Insecure-Requests" : ["1"],
+		"User-Agent" : ["Mozilla/5.0 (SAMSUNG_FRIDGEFREEZER_10.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"]
+	},
+	"params" : {
+		"fan" : ["ban"],
+		"foo" : ["bar"]
+	},
+	"uri" : "/run/inspect_request/HqTisjBvsBLPtpZ0E9t38Lr_LUSkBmMQOG5SDM26leU?foo=bar\u0026fan=ban"
+}
+```
+
+## Coming Soon!
+
+* Integrated Script Editor and Version Browser!
+
 ## Credits
 
 * [otto Javascript Interpreter](https://github.com/robertkrimen/otto)
-used to provide JavaScript execution framework. 
+used to provide JavaScript execution framework.
+* [esc](https://github.com/mjibson/esc) is a simple file embedder for Go.
+* [Monaco Editor](https://github.com/Microsoft/monaco-editor) is a browser based code editor.

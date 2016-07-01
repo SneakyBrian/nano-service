@@ -23,6 +23,9 @@ func HandleDeploy(w http.ResponseWriter, r *http.Request) {
 
 		if name != "" {
 
+			//basis is optionally passed as qs param
+			basis := r.URL.Query().Get("basis")
+
 			defer r.Body.Close()
 
 			body, _ := ioutil.ReadAll(r.Body)
@@ -34,7 +37,7 @@ func HandleDeploy(w http.ResponseWriter, r *http.Request) {
 			//check it compiles
 			if script, err := vm.Compile(name, bodyString); err == nil {
 
-				if hash, err := storage.Set(name, script); err == nil {
+				if hash, err := storage.Set(name, script, basis); err == nil {
 					fmt.Printf("Deployed Script %s (%s)\n", name, hash)
 					w.Write([]byte(hash))
 					return
